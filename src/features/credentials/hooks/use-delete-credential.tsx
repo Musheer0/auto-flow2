@@ -18,7 +18,9 @@ export const useDeleteCredential = () => {
         await queryClient.cancelQueries({ queryKey: infiniteKey });
 
         const prevList =
-          queryClient.getQueryData<InfiniteData<CredentialsPage, string | null>>(infiniteKey);
+          queryClient.getQueryData<
+            InfiniteData<CredentialsPage, string | null>
+          >(infiniteKey);
 
         queryClient.setQueryData(infiniteKey, (old) => {
           if (!old) return old;

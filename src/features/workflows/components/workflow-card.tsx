@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { Workflow as WorkflowIcon, ArrowUpRight } from "lucide-react"
+import Link from "next/link";
+import { Workflow as WorkflowIcon, ArrowUpRight } from "lucide-react";
 
 import {
   Card,
@@ -9,19 +9,19 @@ import {
   CardTitle,
   CardDescription,
   CardFooter,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 
 export interface WorkflowCardData {
-  id: string
-  name: string
-  updated_at: string | Date
-  created_at: string | Date
+  id: string;
+  name: string;
+  updated_at: string | Date;
+  created_at: string | Date;
 }
 
 function formatRelativeTime(date: string | Date) {
-  const value = new Date(date)
-  const diffMs = value.getTime() - Date.now()
-  const diffMinutes = Math.round(diffMs / 60000)
+  const value = new Date(date);
+  const diffMs = value.getTime() - Date.now();
+  const diffMinutes = Math.round(diffMs / 60000);
 
   const divisions: [Intl.RelativeTimeFormatUnit, number][] = [
     ["year", 60 * 24 * 365],
@@ -30,17 +30,17 @@ function formatRelativeTime(date: string | Date) {
     ["day", 60 * 24],
     ["hour", 60],
     ["minute", 1],
-  ]
+  ];
 
-  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" })
+  const rtf = new Intl.RelativeTimeFormat("en", { numeric: "auto" });
 
   for (const [unit, minutesInUnit] of divisions) {
     if (Math.abs(diffMinutes) >= minutesInUnit || unit === "minute") {
-      return rtf.format(Math.round(diffMinutes / minutesInUnit), unit)
+      return rtf.format(Math.round(diffMinutes / minutesInUnit), unit);
     }
   }
 
-  return rtf.format(diffMinutes, "minute")
+  return rtf.format(diffMinutes, "minute");
 }
 
 export function WorkflowCard({ workflow }: { workflow: WorkflowCardData }) {
@@ -75,5 +75,5 @@ export function WorkflowCard({ workflow }: { workflow: WorkflowCardData }) {
         </CardFooter>
       </Card>
     </Link>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useQueryState, parseAsString } from "nuqs"
-import { Loader2, Search, X, Workflow as WorkflowIcon } from "lucide-react"
+import { useQueryState, parseAsString } from "nuqs";
+import { Loader2, Search, X, Workflow as WorkflowIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
-import { useWorkflowsInfinite } from "@/features/workflows/hooks/use-workflows-infinite"
-import { WorkflowCard } from "./workflow-card"
-import { CreateWorkflowDialog } from "./create-workflow-dialog"
+import { useWorkflowsInfinite } from "@/features/workflows/hooks/use-workflows-infinite";
+import { WorkflowCard } from "./workflow-card";
+import { CreateWorkflowDialog } from "./create-workflow-dialog";
 
 export function WorkflowList() {
   // URL-persisted filter value (shareable / refresh-safe). No debounce
@@ -21,8 +21,8 @@ export function WorkflowList() {
     parseAsString.withDefault("").withOptions({
       shallow: false,
       clearOnDefault: true,
-    })
-  )
+    }),
+  );
 
   const {
     data,
@@ -33,19 +33,19 @@ export function WorkflowList() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useWorkflowsInfinite()
+  } = useWorkflowsInfinite();
 
-  const allWorkflows = data?.pages.flatMap((page) => page.workflows) ?? []
+  const allWorkflows = data?.pages.flatMap((page) => page.workflows) ?? [];
 
   // Client-side filter over whatever pages have been fetched so far.
   // Pages not yet loaded (via "Load more") aren't searched — load more
   // first if you expect a match further down the list.
-  const normalizedSearch = search.trim().toLowerCase()
+  const normalizedSearch = search.trim().toLowerCase();
   const workflows = normalizedSearch
     ? allWorkflows.filter((w) =>
-        (w.name || "").toLowerCase().includes(normalizedSearch)
+        (w.name || "").toLowerCase().includes(normalizedSearch),
       )
-    : allWorkflows
+    : allWorkflows;
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
@@ -84,7 +84,7 @@ export function WorkflowList() {
             </button>
           )}
         </div>
-        <CreateWorkflowDialog/>
+        <CreateWorkflowDialog />
       </div>
 
       {/* Error state */}
@@ -179,5 +179,5 @@ export function WorkflowList() {
         </div>
       )}
     </div>
-  )
+  );
 }

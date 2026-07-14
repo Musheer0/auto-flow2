@@ -8,7 +8,7 @@ if (!JWT_SECRET) {
 export const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
 export interface JwtPayload {
   userId: string;
-  sessionId:string
+  sessionId: string;
 }
 
 export const createJwt = (payload: JwtPayload) => {

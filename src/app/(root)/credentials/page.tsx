@@ -1,7 +1,7 @@
-import { CredentialList } from '@/features/credentials/components/credential-list'
+import { CredentialList } from "@/features/credentials/components/credential-list";
 
 const page = () => {
-  return <CredentialList />
-}
+  return <CredentialList />;
+};
 
-export default page
+export default page;

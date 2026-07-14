@@ -11,7 +11,7 @@ export const credentialsRouter = createTRPCRouter({
         name: z.string(),
         type: z.nativeEnum(NodeType),
         data: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const credential = await prisma.credential.create({
@@ -35,7 +35,7 @@ export const credentialsRouter = createTRPCRouter({
         name: z.string(),
         type: z.nativeEnum(NodeType),
         data: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const credential = await prisma.credential.updateMany({
@@ -57,7 +57,7 @@ export const credentialsRouter = createTRPCRouter({
     .input(
       z.object({
         credential_id: z.string(),
-      })
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       await prisma.credential.deleteMany({
@@ -73,7 +73,7 @@ export const credentialsRouter = createTRPCRouter({
     .input(
       z.object({
         type: z.nativeEnum(NodeType),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const credentials = await prisma.credential.findMany({
@@ -92,43 +92,43 @@ export const credentialsRouter = createTRPCRouter({
     }),
 
   getAll: protectedProcedure
-  .input(
-    z.object({
-      cursor: z.string().optional(),
-    })
-  )
-  .query(async ({ ctx, input }) => {
-    const hasCursor = !!input.cursor;
-
-    const credentials = await prisma.credential.findMany({
-      where: {
-        user_id: ctx.session.user.id,
-      },
-      orderBy: {
-        created_at: "desc",
-      },
-      take: 10,
-      ...(hasCursor && {
-        cursor: {
-          id: input.cursor,
-        },
-        skip: 1, // don't include the cursor item again
+    .input(
+      z.object({
+        cursor: z.string().optional(),
       }),
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        created_at: true,
-        updated_at: true,
-      },
-    });
+    )
+    .query(async ({ ctx, input }) => {
+      const hasCursor = !!input.cursor;
 
-    return {
-      credentials,
-      nextCursor:
-        credentials.length === 10
-          ? credentials[credentials.length - 1].id
-          : null,
-    };
-  }),
+      const credentials = await prisma.credential.findMany({
+        where: {
+          user_id: ctx.session.user.id,
+        },
+        orderBy: {
+          created_at: "desc",
+        },
+        take: 10,
+        ...(hasCursor && {
+          cursor: {
+            id: input.cursor,
+          },
+          skip: 1, // don't include the cursor item again
+        }),
+        select: {
+          id: true,
+          name: true,
+          type: true,
+          created_at: true,
+          updated_at: true,
+        },
+      });
+
+      return {
+        credentials,
+        nextCursor:
+          credentials.length === 10
+            ? credentials[credentials.length - 1].id
+            : null,
+      };
+    }),
 });

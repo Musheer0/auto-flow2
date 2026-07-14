@@ -1,1 +1,1 @@
-export const cookie_name = "autoflow-session"
+export const cookie_name = "autoflow-session";

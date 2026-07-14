@@ -1,13 +1,13 @@
-import { CreateWorkflowDialog } from '@/features/workflows/components/create-workflow-dialog'
-import { WorkflowList } from '@/features/workflows/components/workflow-list'
-import React from 'react'
+import { CreateWorkflowDialog } from "@/features/workflows/components/create-workflow-dialog";
+import { WorkflowList } from "@/features/workflows/components/workflow-list";
+import React from "react";
 
 const page = () => {
   return (
     <div>
-      <WorkflowList/>
+      <WorkflowList />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

@@ -6,18 +6,14 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getCurrentUser } from "@/libs/auth.server";
 
-export const AuthContext = createContext<
-  Awaited<ReturnType<typeof getCurrentUser>> | null
->(null);
+export const AuthContext = createContext<Awaited<
+  ReturnType<typeof getCurrentUser>
+> | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
-  const {
-    data,
-    isPending,
-    isError,
-  } = useQuery({
+  const { data, isPending, isError } = useQuery({
     queryKey: ["user-session"],
     queryFn: getCurrentUser,
     retry: 2, // Retry only twice
@@ -44,11 +40,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return null;
   }
 
-  return (
-    <AuthContext.Provider value={data}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

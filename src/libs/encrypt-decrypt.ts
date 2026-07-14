@@ -1,7 +1,7 @@
 import crypto from "crypto";
 
 const ALGORITHM = "aes-256-cbc";
-const KEY = process.env.CREDENTIALS_KEY!
+const KEY = process.env.CREDENTIALS_KEY!;
 
 export function encrypt(text: string) {
   const iv = crypto.randomBytes(16);
@@ -23,7 +23,7 @@ export function decrypt(payload: string) {
   const decipher = crypto.createDecipheriv(
     ALGORITHM,
     KEY,
-    Buffer.from(ivHex, "hex")
+    Buffer.from(ivHex, "hex"),
   );
 
   const decrypted = Buffer.concat([
@@ -33,4 +33,3 @@ export function decrypt(payload: string) {
 
   return decrypted.toString("utf8");
 }
-

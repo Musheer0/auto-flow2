@@ -19,7 +19,9 @@ export const useUpdateCredential = () => {
         await queryClient.cancelQueries({ queryKey: infiniteKey });
 
         const prevList =
-          queryClient.getQueryData<InfiniteData<CredentialsPage, string | null>>(infiniteKey);
+          queryClient.getQueryData<
+            InfiniteData<CredentialsPage, string | null>
+          >(infiniteKey);
 
         queryClient.setQueryData(infiniteKey, (old) => {
           if (!old) return old;
@@ -29,7 +31,12 @@ export const useUpdateCredential = () => {
               ...page,
               credentials: page.credentials.map((c) =>
                 c.id === input.credential_id
-                  ? { ...c, name: input.name, type: input.type, data: input.data }
+                  ? {
+                      ...c,
+                      name: input.name,
+                      type: input.type,
+                      data: input.data,
+                    }
                   : c,
               ),
             })),

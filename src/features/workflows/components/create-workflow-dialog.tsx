@@ -52,17 +52,14 @@ export function CreateWorkflowDialog() {
         }
       }}
     >
-      <DialogTrigger >
+      <DialogTrigger>
         <Button>
           <Plus className="mr-2 h-4 w-4" />
           New Workflow
         </Button>
       </DialogTrigger>
 
-      <DialogContent
-        className="sm:max-w-md"
-       
-      >
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Create Workflow</DialogTitle>
           <DialogDescription>
@@ -81,10 +78,7 @@ export function CreateWorkflowDialog() {
             disabled={createWorkflow.isPending}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => {
-              if (
-                e.key === "Enter" &&
-                !createWorkflow.isPending
-              ) {
+              if (e.key === "Enter" && !createWorkflow.isPending) {
                 handleCreate();
               }
             }}
@@ -92,10 +86,7 @@ export function CreateWorkflowDialog() {
         </div>
 
         <DialogFooter>
-          <Button
-            onClick={handleCreate}
-            disabled={createWorkflow.isPending}
-          >
+          <Button onClick={handleCreate} disabled={createWorkflow.isPending}>
             {createWorkflow.isPending && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}

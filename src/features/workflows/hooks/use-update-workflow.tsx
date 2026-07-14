@@ -27,7 +27,9 @@ export const useUpdateWorkflow = () => {
 
         const prevWorkflow = queryClient.getQueryData<Workflow>(byIdKey);
         const prevList =
-          queryClient.getQueryData<InfiniteData<WorkflowsPage, string | null>>(infiniteKey);
+          queryClient.getQueryData<InfiniteData<WorkflowsPage, string | null>>(
+            infiniteKey,
+          );
 
         if (prevWorkflow) {
           queryClient.setQueryData(byIdKey, (old) => {

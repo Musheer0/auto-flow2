@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useQueryState, parseAsString } from "nuqs"
-import { Loader2, Search, X, KeyRound } from "lucide-react"
+import { useQueryState, parseAsString } from "nuqs";
+import { Loader2, Search, X, KeyRound } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
-import { useCredentialsInfinite } from "@/features/credentials/hooks/use-credentials-infinite"
-import { CredentialCard } from "./credential-card"
-import { CreateCredentialDialog } from "./create-credential-dialog"
+import { useCredentialsInfinite } from "@/features/credentials/hooks/use-credentials-infinite";
+import { CredentialCard } from "./credential-card";
+import { CreateCredentialDialog } from "./create-credential-dialog";
 
 export function CredentialList() {
   const [search, setSearch] = useQueryState(
@@ -18,8 +18,8 @@ export function CredentialList() {
     parseAsString.withDefault("").withOptions({
       shallow: false,
       clearOnDefault: true,
-    })
-  )
+    }),
+  );
 
   const {
     data,
@@ -30,16 +30,16 @@ export function CredentialList() {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useCredentialsInfinite()
+  } = useCredentialsInfinite();
 
-  const allCredentials = data?.pages.flatMap((page) => page.credentials) ?? []
+  const allCredentials = data?.pages.flatMap((page) => page.credentials) ?? [];
 
-  const normalizedSearch = search.trim().toLowerCase()
+  const normalizedSearch = search.trim().toLowerCase();
   const credentials = normalizedSearch
     ? allCredentials.filter((c) =>
-        (c.name || "").toLowerCase().includes(normalizedSearch)
+        (c.name || "").toLowerCase().includes(normalizedSearch),
       )
-    : allCredentials
+    : allCredentials;
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 p-4 sm:p-6 lg:p-8">
@@ -174,5 +174,5 @@ export function CredentialList() {
         </div>
       )}
     </div>
-  )
+  );
 }
