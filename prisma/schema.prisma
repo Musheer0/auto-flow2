@@ -13,14 +13,16 @@ datasource db {
 }
 
 model user {
-  id         String    @id @default(cuid())
-  name       String
-  email      String    @unique
-  picture    String?
-  accounts   account[]
-  sessions   session[]
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  picture     String?
+  accounts    account[]
+  sessions    session[]
+  workflows   workflow[]
+  credentials credential[]
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
 }
 
 enum account_type {
@@ -48,4 +50,34 @@ model session {
   expires_at DateTime
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+enum NodeType {
+  MANUAL_TRIGGER
+  WEBHOOK
+  HTTP_REQUEST
+  SEND_TELEGRAM_MESSAGE
+}
+
+model workflow {
+  id         String   @id @default(cuid())
+  user_id    String
+  user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  data       String   @default("{}")
+  name       String   @default("untitled workflow")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model credential {
+  id         String   @id @default(cuid())
+  user_id    String
+  user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  data       String
+  type       NodeType
+  name       String   @default("untitled workflow")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([type, user_id])
 }

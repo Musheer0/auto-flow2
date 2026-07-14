@@ -38,6 +38,12 @@ export const GET = async(req:NextRequest)=>{
         })
        } catch (error) {
          console.error(error)
+          user = await prisma.user.findFirst({
+            where:{
+                email:data.email!
+            }
+        })
+        if(!user)
          return NextResponse.json({error:"error creating user"}, {status:500})
        }
     }
@@ -59,7 +65,7 @@ const expDate =expiresAt
     }
     })
     const token = createJwt({userId:user.id,sessionId:session.id})
-    const response = NextResponse.redirect(new URL(req.nextUrl.origin,isNewUser ? "/onboard":"/workflows"))
+    const response = NextResponse.redirect(new URL(isNewUser ? "/onboard":"/workflows",req.nextUrl.origin))
       response.cookies.set("autoflow-session", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
