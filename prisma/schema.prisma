@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model user {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  picture     String?
+  accounts    account[]
+  sessions    session[]
+  workflows   workflow[]
+  credentials credential[]
+  created_at  DateTime     @default(now())
+  updated_at  DateTime     @updatedAt
+}
+
+enum account_type {
+  GOOGLE
+}
+
+model account {
+  id            String   @id @default(cuid())
+  user_id       String
+  user          user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  refresh_token String
+  expires_at    DateTime
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+  scope         String
+}
+
+model session {
+  id      String @id @default(cuid())
+  user_id String
+  user    user   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  ip         String?
+  ua         String
+  expires_at DateTime
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum NodeType {
+  MANUAL_TRIGGER
+  WEBHOOK
+  HTTP_REQUEST
+  SEND_TELEGRAM_MESSAGE
+}
+
+model workflow {
+  id         String   @id @default(cuid())
+  user_id    String
+  user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  data       String   @default("{}")
+  name       String   @default("untitled workflow")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model credential {
+  id         String   @id @default(cuid())
+  user_id    String
+  user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  data       String
+  type       NodeType
+  name       String   @default("untitled workflow")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@index([type, user_id])
+}
