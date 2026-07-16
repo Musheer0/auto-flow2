@@ -58,7 +58,10 @@ enum NodeType {
   HTTP_REQUEST
   SEND_TELEGRAM_MESSAGE
 }
-
+enum NodeAction {
+  EXECUTOR
+  TRIGGER
+}
 model workflow {
   id         String   @id @default(cuid())
   user_id    String

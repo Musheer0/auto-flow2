@@ -12,6 +12,7 @@ import { WorkflowDetailHeader } from "./workflow-detail-header";
 import { WorkflowDetailSkeleton } from "./workflow-detail-skeleton";
 import { WorkflowDetailNotFound } from "./workflow-detail-not-found";
 import { WorkflowEditDialog } from "./workflow-edit-dialog";
+import WorkflowEditor from "@/features/editor/components/editor";
 
 export function WorkflowDetail({ workflowId }: { workflowId: string }) {
   const router = useRouter();
@@ -58,7 +59,7 @@ export function WorkflowDetail({ workflowId }: { workflowId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-6 ">
+    <div className="flex flex-col w-screen h-screen">
       <WorkflowDetailHeader
         name={workflow.name}
         createdAt={workflow.created_at}
@@ -75,6 +76,9 @@ export function WorkflowDetail({ workflowId }: { workflowId: string }) {
         onSave={handleUpdate}
         isPending={updateWorkflow.isPending}
       />
+      <div className="w-full flex-1">
+        <WorkflowEditor/>
+      </div>
     </div>
   );
 }
