@@ -37,6 +37,7 @@ import { toast } from "sonner";
 import { useEditorStore } from "@/features/editor/store/editor.store";
 import type { NodeData } from "@/features/editor/types";
 import type { HttpRequestFormSchemaT } from "@/features/editor/schemas/http-form.schema";
+import SelectCredentials from "@/features/credentials/components/select-credential";
 
 const methods = [
   "GET",
@@ -257,12 +258,14 @@ const HttpRequestForm = (
                   {...form.register(`headers.${index}.key`)}
                 />
 
-                <Input
+                <div className="flex gap-2 flex-col">
+                  <Input
                   placeholder="Value"
                   className="font-mono text-sm"
                   {...form.register(`headers.${index}.value`)}
                 />
-
+                <SelectCredentials type="HTTP_REQUEST" currentId={form.getValues(`headers.${index}.value`)} onSelect={(v)=>form.setValue(`headers.${index}.value`, `credential-${v}`)}/>
+                </div>
                 <Button
                   type="button"
                   size="icon"

@@ -11,6 +11,7 @@ import { useEditorStore } from '../../store/editor.store'
 import { toast } from 'sonner'
 import { NodeData, WebhookData } from '../../types'
 import { cn } from '@/lib/utils'
+import SelectCredentials from '@/features/credentials/components/select-credential'
 
 const WebhookForm = (props: NodeProps & { children: React.ReactNode }) => {
   const node_data: NodeData<WebhookData> = props.data as any
@@ -75,7 +76,7 @@ const WebhookForm = (props: NodeProps & { children: React.ReactNode }) => {
         <div className="flex flex-col gap-1.5">
           <Label>Node name</Label>
           <Input
-            placeholder="e.g. New Order Webhook"
+            placeholder="e.g. webhook_youtube"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
@@ -90,21 +91,8 @@ const WebhookForm = (props: NodeProps & { children: React.ReactNode }) => {
         <div className="flex flex-col gap-1.5">
           <Label>Webhook secret</Label>
           <div className="relative">
-            <Input
-              type={showSecret ? 'text' : 'password'}
-              placeholder="Leave blank to skip verification"
-              value={whSecret}
-              onChange={(e) => setWhSecret(e.target.value)}
-              className="pr-9"
-            />
-            <button
-              type="button"
-              onClick={() => setShowSecret((s) => !s)}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-              aria-label={showSecret ? 'Hide secret' : 'Show secret'}
-            >
-              {showSecret ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
-            </button>
+          <SelectCredentials type='WEBHOOK' currentId={whSecret} onSelect={setWhSecret}/>
+         
           </div>
           <p
             className={cn(

@@ -36,28 +36,45 @@ const NODE_TYPE_LABELS: Record<NodeType, string> = {
   [NodeType.SEND_TELEGRAM_MESSAGE]: "Telegram Message",
 };
 
-export function CreateCredentialDialog() {
+interface CreateCredentialDialogProps {
+  type?: NodeType;
+  children?: React.ReactNode;
+  onCreated?: (id: string) => void;
+}
+
+export function CreateCredentialDialog({
+  type,
+  children,
+  onCreated,
+}: CreateCredentialDialogProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
-  const [type, setType] = useState<NodeType>(NodeType.HTTP_REQUEST);
+  const [selectedType, setSelectedType] = useState<NodeType>(
+    type ?? NodeType.HTTP_REQUEST,
+  );
   const [data, setData] = useState("");
 
   const createCredential = useCreateCredential();
 
+  // if a fixed type is passed, always use it; otherwise fall back to the picker's state
+  const resolvedType = type ?? selectedType;
+
   const handleCreate = async () => {
     try {
-      await createCredential.mutateAsync({
+      const created = await createCredential.mutateAsync({
         name: name.trim() || "untitled credential",
-        type,
+        type: resolvedType,
         data: data.trim(),
       });
 
       toast.success("Credential created");
 
       setName("");
-      setType(NodeType.HTTP_REQUEST);
+      setSelectedType(type ?? NodeType.HTTP_REQUEST);
       setData("");
       setOpen(false);
+
+      onCreated?.(created.id);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to create credential",
@@ -77,15 +94,19 @@ export function CreateCredentialDialog() {
       }}
     >
       <DialogTrigger>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" />
-          New Credential
-        </Button>
+        {children ?? (
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            New Credential
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Create Credential</DialogTitle>
+          <DialogTitle>
+            Create {NODE_TYPE_LABELS[resolvedType]} Credential
+          </DialogTitle>
           <DialogDescription>
             Add an API key, token, or other secret to use in your workflows.
           </DialogDescription>
@@ -109,29 +130,31 @@ export function CreateCredentialDialog() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label>Type</Label>
+          {!type && (
+            <div className="space-y-2">
+              <Label>Type</Label>
 
-            <Select
-              value={type}
-              onValueChange={(value) => {
-                if (value !== null) setType(value as NodeType);
-              }}
-              disabled={createCredential.isPending}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue />
-              </SelectTrigger>
+              <Select
+                value={selectedType}
+                onValueChange={(value) => {
+                  if (value !== null) setSelectedType(value as NodeType);
+                }}
+                disabled={createCredential.isPending}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue />
+                </SelectTrigger>
 
-              <SelectContent>
-                {Object.values(NodeType).map((nodeType) => (
-                  <SelectItem key={nodeType} value={nodeType}>
-                    {NODE_TYPE_LABELS[nodeType]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+                <SelectContent>
+                  {Object.values(NodeType).map((nodeType) => (
+                    <SelectItem key={nodeType} value={nodeType}>
+                      {NODE_TYPE_LABELS[nodeType]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="credential-data">Secret</Label>

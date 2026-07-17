@@ -37,6 +37,13 @@ export const useCreateCredential = () => {
             ],
           };
         });
+         const byTypeKey = trpc.credentials.getByType.queryKey({
+          type: newCredential.type,
+        });
+        queryClient.setQueryData(byTypeKey, (old) => {
+          if (!old) return [newCredential];
+          return [newCredential, ...old];
+        });
       },
     }),
   );
