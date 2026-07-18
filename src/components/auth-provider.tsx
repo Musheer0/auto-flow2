@@ -4,7 +4,7 @@ import React, { createContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 
-import { getCurrentUser } from "@/libs/auth.server";
+import { getCurrentUser } from "@/lib/auth.server";
 
 export const AuthContext = createContext<Awaited<
   ReturnType<typeof getCurrentUser>

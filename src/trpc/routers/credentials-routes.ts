@@ -1,6 +1,6 @@
 import z from "zod";
 import prisma from "@/db";
-import { encrypt, decrypt } from "@/libs/encrypt-decrypt";
+import { encrypt, decrypt } from "@/lib/encrypt-decrypt";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { NodeType } from "@/generated/prisma/enums";
 

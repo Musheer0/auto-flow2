@@ -36,18 +36,8 @@ import { toast } from "sonner";
 
 import { useEditorStore } from "@/features/editor/store/editor.store";
 import type { NodeData } from "@/features/editor/types";
-import type { HttpRequestFormSchemaT } from "@/features/editor/schemas/http-form.schema";
+import { methods, type HttpRequestFormSchemaT } from "@/features/editor/schemas/http-form.schema";
 import SelectCredentials from "@/features/credentials/components/select-credential";
-
-const methods = [
-  "GET",
-  "POST",
-  "PUT",
-  "PATCH",
-  "DELETE",
-  "HEAD",
-  "OPTIONS",
-] as const;
 
 // Methods that don't conventionally carry a request body.
 // Keeping the body field out of the way here avoids the "I sent a body but

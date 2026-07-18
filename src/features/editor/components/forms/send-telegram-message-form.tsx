@@ -22,12 +22,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
-import { EyeIcon, EyeOffIcon, InfoIcon, SendIcon } from "lucide-react";
+import { InfoIcon, SendIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useEditorStore } from "@/features/editor/store/editor.store";
 import type { NodeData } from "@/features/editor/types";
 import { telegramSendMessageSchema } from "@/features/editor/schemas/send-telegram-message.schema";
+import SelectCredentials from "@/features/credentials/components/select-credential";
 
 const TELEGRAM_MESSAGE_LIMIT = 4096;
 
@@ -41,9 +42,11 @@ const SendTelegramMessageForm = (
   props: NodeProps & { children: React.ReactNode }
 ) => {
   const [open, setOpen] = useState(false);
-  const [showToken, setShowToken] = useState(false);
 
   const node = props.data as NodeData<z.infer<typeof telegramSendMessageSchema>>;
+  const [credentialId, setCredentialId] = useState(
+    node?.user_data?.bot_token ?? ""
+  );
   const { updateNode } = useEditorStore();
 
   const form = useForm<FormValues>({
@@ -105,26 +108,14 @@ const SendTelegramMessageForm = (
 
           <div className="space-y-2">
             <Label>Bot token</Label>
-            <div className="relative">
-              <Input
-                type={showToken ? "text" : "password"}
-                placeholder="123456789:AAExampleTokenFromBotFather"
-                className="pr-9 font-mono text-sm"
-                {...form.register("bot_token")}
-              />
-              <button
-                type="button"
-                onClick={() => setShowToken((s) => !s)}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                aria-label={showToken ? "Hide token" : "Show token"}
-              >
-                {showToken ? (
-                  <EyeOffIcon className="size-4" />
-                ) : (
-                  <EyeIcon className="size-4" />
-                )}
-              </button>
-            </div>
+            <SelectCredentials
+              type="SEND_TELEGRAM_MESSAGE"
+              currentId={credentialId}
+              onSelect={(id) => {
+                setCredentialId(id);
+                form.setValue("bot_token", id);
+              }}
+            />
             {form.formState.errors.bot_token ? (
               <p className="text-xs text-destructive">
                 {form.formState.errors.bot_token.message}

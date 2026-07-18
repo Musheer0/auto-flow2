@@ -17,7 +17,6 @@ import WorkflowEditor from "@/features/editor/components/editor";
 export function WorkflowDetail({ workflowId }: { workflowId: string }) {
   const router = useRouter();
   const { data: workflow, isPending, isError } = useWorkflowById(workflowId);
-
   const deleteWorkflow = useDeleteWorkflow();
   const updateWorkflow = useUpdateWorkflow();
 

@@ -1,6 +1,6 @@
 import { cookie_name } from "@/constants";
 import prisma from "@/db";
-import { verifyJwt } from "@/libs/jwt";
+import { verifyJwt } from "@/lib/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export const DELETE = async (req: NextRequest) => {

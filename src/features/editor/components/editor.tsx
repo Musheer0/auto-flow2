@@ -16,6 +16,7 @@ import NodesSidebar from "./nodes-sidebar";
 import { NodeType } from "@/generated/prisma/enums";
 import { createId } from "@paralleldrive/cuid2";
 import { NodeTypes } from "../config/node-types";
+import SaveButton from "./save-button";
 
 export default function WorkflowEditor() {
   const { edges, nodes, onNodesChange, onEdgesChange, onConnect, addNode } =
@@ -43,6 +44,9 @@ export default function WorkflowEditor() {
         <NodesSidebar onSelect={handleAddNode}>
           <Button>Add Node</Button>
         </NodesSidebar>
+      </Panel>
+      <Panel position="bottom-center">
+      <SaveButton/>
       </Panel>
     </ReactFlow>
   );

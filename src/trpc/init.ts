@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@/libs/auth.server";
+import { getCurrentUser } from "@/lib/auth.server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { cache } from "react";
 

@@ -3,7 +3,7 @@ import { NextRequest, NextResponse, userAgent } from "next/server";
 import { google } from "googleapis";
 import prisma from "@/db";
 import { user } from "@/generated/prisma/client";
-import { createJwt, expiresAt } from "@/libs/jwt";
+import { createJwt, expiresAt } from "@/lib/jwt";
 
 export const GET = async (req: NextRequest) => {
   const s = new URLSearchParams(req.url);

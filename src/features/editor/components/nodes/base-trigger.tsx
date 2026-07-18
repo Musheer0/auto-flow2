@@ -14,13 +14,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
+import { NodeType } from '@/generated/prisma/enums'
 
 const BaseTrigger = (props: NodeProps) => {
   const NodeUi = nodesUi[props.type as keyof typeof nodesUi]
   const NodeForm = NodeForms[props.type as keyof typeof nodesUi]
   const node_data: NodeData<any> = props.data as any
 
-  const name = node_data?.config?.name
+  const name = node_data?.config?.name || props.type===NodeType.MANUAL_TRIGGER ? "MANUAL_TRIGGER":null
   const isUnconfigured = !name
 
   if (NodeUi)

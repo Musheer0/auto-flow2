@@ -1,5 +1,6 @@
 import { z } from "zod";
-export const httpMethodSchema = z.enum([
+
+export const methods = [
   "GET",
   "POST",
   "PUT",
@@ -7,7 +8,7 @@ export const httpMethodSchema = z.enum([
   "DELETE",
   "HEAD",
   "OPTIONS",
-]);
+] as const;
 
 export const keyValueSchema = z.object({
   key: z.string(),
@@ -15,11 +16,15 @@ export const keyValueSchema = z.object({
 });
 
 export const httpRequestSchema = z.object({
-  url: z.url("Please enter a valid URL"),
-  method: httpMethodSchema.default("GET"),
-  headers: z.array(keyValueSchema).default([]),
-  query: z.array(keyValueSchema).default([]),
-  body: z.string().default(""),
+  url: z.url("Enter a valid URL, including https://"),
+  method: z.enum(methods),
+  headers: z.array(
+    z.object({
+      key: z.string(),
+      value: z.string(),
+    })
+  ),
+  body: z.string(),
 });
 
 export type HttpRequestFormSchemaT = z.infer<typeof httpRequestSchema>;
