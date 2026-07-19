@@ -8,7 +8,7 @@ export const nodeSchema = z.object({
     x: z.number(),
     y: z.number(),
   }),
-  data: z.record(z.string(), z.unknown()),
+  data: z.any(),
 });
 
 export const edgeSchema = z.object({
@@ -24,5 +24,10 @@ export const workflowSchema = z.object({
   edges: z.array(edgeSchema),
   workflowId:z.string()
 });
-
+export const workflowDataSchema = z.object({
+  nodes: z.array(nodeSchema),
+  edges: z.array(edgeSchema),
+});
 export type WorkflowSchema = z.infer<typeof workflowSchema>;
+export type WorkflowDataSchema = z.infer<typeof workflowDataSchema>;
+
