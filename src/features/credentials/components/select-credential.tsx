@@ -49,7 +49,7 @@ const SelectCredentials: React.FC<props> = ({ type, currentId, onSelect }) => {
   return (
     <div className="flex items-center gap-2">
       <Select
-        value={currentId}
+        defaultValue={currentId}
         onValueChange={(val) => {
           if (val) onSelect(val)
         }}

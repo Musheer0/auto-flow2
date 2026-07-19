@@ -3,6 +3,8 @@ import prisma from "@/db";
 import { encrypt, decrypt } from "@/lib/encrypt-decrypt";
 import { createTRPCRouter, protectedProcedure } from "@/trpc/init";
 import { NodeType } from "@/generated/prisma/enums";
+import { redis } from "@/db/redis";
+import { redisKeys } from "@/lib/redis-keys";
 
 export const credentialsRouter = createTRPCRouter({
   create: protectedProcedure
@@ -22,6 +24,8 @@ export const credentialsRouter = createTRPCRouter({
           data: encrypt(input.data),
         },
       });
+
+      await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, input.type));
 
       return {
         ...credential,
@@ -50,6 +54,8 @@ export const credentialsRouter = createTRPCRouter({
         },
       });
 
+      await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, input.type));
+
       return credential;
     }),
 
@@ -60,12 +66,24 @@ export const credentialsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
+      const credential = await prisma.credential.findFirst({
+        where: {
+          id: input.credential_id,
+          user_id: ctx.session.user.id,
+        },
+        select: { type: true },
+      });
+
       await prisma.credential.deleteMany({
         where: {
           id: input.credential_id,
           user_id: ctx.session.user.id,
         },
       });
+
+      if (credential) {
+        await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, credential.type));
+      }
 
       return true;
     }),
@@ -76,6 +94,10 @@ export const credentialsRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
+      const cacheKey = redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, input.type);
+      const cached = await redis.get<Awaited<ReturnType<typeof prisma.credential.findMany>>>(cacheKey);
+      if (cached) return cached;
+
       const credentials = await prisma.credential.findMany({
         where: {
           user_id: ctx.session.user.id,
@@ -86,9 +108,13 @@ export const credentialsRouter = createTRPCRouter({
         },
       });
 
-      return credentials.map((credential) => ({
+      const result = credentials.map((credential) => ({
         ...credential,
       }));
+
+      await redis.set(cacheKey, result, { ex: 60 * 60 });
+
+      return result;
     }),
 
   getAll: protectedProcedure

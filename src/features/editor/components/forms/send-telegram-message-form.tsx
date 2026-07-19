@@ -42,13 +42,8 @@ const SendTelegramMessageForm = (
   props: NodeProps & { children: React.ReactNode }
 ) => {
   const [open, setOpen] = useState(false);
-
   const node = props.data as NodeData<z.infer<typeof telegramSendMessageSchema>>;
-  const [credentialId, setCredentialId] = useState(
-    node?.user_data?.bot_token ?? ""
-  );
   const { updateNode } = useEditorStore();
-
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -60,7 +55,6 @@ const SendTelegramMessageForm = (
   });
 
   const message = form.watch("message");
-  const name = form.watch("name");
   const remaining = TELEGRAM_MESSAGE_LIMIT - message.length;
   const nearLimit = remaining <= 200;
 
@@ -110,9 +104,8 @@ const SendTelegramMessageForm = (
             <Label>Bot token</Label>
             <SelectCredentials
               type="SEND_TELEGRAM_MESSAGE"
-              currentId={credentialId}
+              currentId={form.getValues("bot_token")}
               onSelect={(id) => {
-                setCredentialId(id);
                 form.setValue("bot_token", id);
               }}
             />

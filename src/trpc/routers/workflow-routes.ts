@@ -2,6 +2,8 @@ import z from "zod";
 import { createTRPCRouter, protectedProcedure } from "../init";
 import { generateSlug } from "random-word-slugs";
 import prisma from "@/db";
+import { redis } from "@/db/redis";
+import { redisKeys } from "@/lib/redis-keys";
 
 export const workflowsRouer = createTRPCRouter({
   create: protectedProcedure
@@ -19,6 +21,7 @@ export const workflowsRouer = createTRPCRouter({
           name: workflow_name,
         },
       });
+      await redis.set(redisKeys.WORKFLOW(userId, new_workflow.id), new_workflow, { ex: 60 * 60 });
       return new_workflow;
     }),
   update: protectedProcedure
@@ -41,6 +44,7 @@ export const workflowsRouer = createTRPCRouter({
           name: workflow_name,
         },
       });
+      await redis.set(redisKeys.WORKFLOW(userId, updated_workflow.id), updated_workflow, { ex: 60 * 60 });
       return updated_workflow;
     }),
   delete: protectedProcedure
@@ -57,6 +61,7 @@ export const workflowsRouer = createTRPCRouter({
           id: input.workflow_id,
         },
       });
+      await redis.del(redisKeys.WORKFLOW(userId, input.workflow_id));
     }),
   getById: protectedProcedure
     .input(
@@ -66,12 +71,18 @@ export const workflowsRouer = createTRPCRouter({
     )
     .query(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
+      const cacheKey = redisKeys.WORKFLOW(userId, input.workflow_id);
+      const cached = await redis.get<Awaited<ReturnType<typeof prisma.workflow.findFirst>>>(cacheKey);
+      if (cached) return cached;
       const workflow = await prisma.workflow.findFirst({
         where: {
           user_id: userId,
           id: input.workflow_id,
         },
       });
+      if (workflow) {
+        await redis.set(cacheKey, workflow, { ex: 60 * 60 });
+      }
       return workflow;
     }),
   getAll: protectedProcedure
