@@ -5,7 +5,7 @@ import { verifyJwt } from "@/lib/jwt";
 import { redisKeys } from "@/lib/redis-keys";
 import { NextRequest, NextResponse } from "next/server";
 
-export const DELETE = async (req: NextRequest) => {
+export const GET = async (req: NextRequest) => {
   const session = req.cookies.get(cookie_name)?.value;
   const isLoggedIn = !!session;
   if (!isLoggedIn)
