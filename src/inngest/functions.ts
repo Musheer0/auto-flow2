@@ -40,6 +40,7 @@ export const processTask = inngest.createFunction(
     const { data } = event;
     const workflowRecord: workflow = data.workflow as any;
     const triggerNodeId = data.triggerNodeId as string;
+    const body = data?.body || null
     const workflowData = JSON.parse(
       workflowRecord.data
     ) as WorkflowDataSchema;
@@ -68,7 +69,7 @@ export const processTask = inngest.createFunction(
         trigger.type === "MANUAL_TRIGGER"
           ? "manual"
           : trigger.data?.config?.name ?? trigger.type
-      ]: "started",
+      ]: body||"started",
     };
 
     const executed = new Set<string>();
@@ -89,7 +90,7 @@ export const processTask = inngest.createFunction(
               `${node.data?.config?.name||node.type}-${node.id}`,
               () => executeNode(workflowRecord.user_id,node, context)
             );
-            context[node.data?.config?.name ?? node.type] = result;
+            if(node.id!==triggerNodeId) context[node.data?.config?.name ?? node.type] = result;
           }
 
           executed.add(id);

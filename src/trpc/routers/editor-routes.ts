@@ -20,5 +20,6 @@ export const editorRouter = createTRPCRouter({
         });
               await redis.set(redisKeys.WORKFLOW(userId, updated_workflow.id), updated_workflow, { ex: 60 * 60 });
         
+              await redis.set(redisKeys.WORKFLOW_RUN( updated_workflow.id), updated_workflow, { ex: 60 * 60 });
     })
 })
