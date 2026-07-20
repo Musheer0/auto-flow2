@@ -7,18 +7,27 @@ import {
   edgeSchema,
 } from "@/features/editor/schemas/workflow-schema";
 import z from "zod";
+import { executorsConfig } from "@/features/nodes/config";
+import { NonRetriableError } from "inngest";
 
-type Node = z.infer<typeof nodeSchema>;
-type Edge = z.infer<typeof edgeSchema>;
+export type Node = z.infer<typeof nodeSchema>;
+export type Edge = z.infer<typeof edgeSchema>;
 
 const executeNode = async (
+  userId:string,
   node: Node,
   context: Record<string, any>
 ) => {
-  console.log(`Executing: ${node.data?.config?.name ?? node.type}`);
-
-  await new Promise((r) => setTimeout(r, 500));
-
+  const executor = executorsConfig[node.type]
+  if(executor){
+    try {
+      const res = await executor(userId,node.data,context)
+      return res
+    } catch (error) {
+      console.warn(error)
+      throw new NonRetriableError("Error executiong node:"+node.id)
+    }
+  }
   return {
     success: true,
     node: node.data?.config?.name ?? node.type,
@@ -77,8 +86,8 @@ export const processTask = inngest.createFunction(
 
           if (node.type !== "MANUAL_TRIGGER") {
             const result = await step.run(
-              `execute-${node.id}`,
-              () => executeNode(node, context)
+              `${node.data?.config?.name||node.type}-${node.id}`,
+              () => executeNode(workflowRecord.user_id,node, context)
             );
             context[node.data?.config?.name ?? node.type] = result;
           }
@@ -94,5 +103,6 @@ export const processTask = inngest.createFunction(
         })
       );
     }
+    return context
   }
 );
