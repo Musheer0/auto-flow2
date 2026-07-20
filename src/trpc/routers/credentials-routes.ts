@@ -26,10 +26,37 @@ export const credentialsRouter = createTRPCRouter({
       });
 
       await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, input.type));
+      await redis.set(redisKeys.CREDENTIAL(ctx.session.user.id, credential.id), credential, { ex: 60 * 60 });
 
       return {
         ...credential,
       };
+    }),
+
+  getById: protectedProcedure
+    .input(
+      z.object({
+        credential_id: z.string(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const userId = ctx.session.user.id;
+      const cacheKey = redisKeys.CREDENTIAL(userId, input.credential_id);
+      const cached = await redis.get(cacheKey);
+      if (cached) return cached;
+
+      const credential = await prisma.credential.findFirst({
+        where: {
+          id: input.credential_id,
+          user_id: userId,
+        },
+      });
+
+      if (credential) {
+        await redis.set(cacheKey, credential, { ex: 60 * 60 });
+      }
+
+      return credential;
     }),
 
   update: protectedProcedure
@@ -42,7 +69,7 @@ export const credentialsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const credential = await prisma.credential.updateMany({
+      await prisma.credential.updateMany({
         where: {
           id: input.credential_id,
           user_id: ctx.session.user.id,
@@ -54,9 +81,19 @@ export const credentialsRouter = createTRPCRouter({
         },
       });
 
-      await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, input.type));
+      const updated = await prisma.credential.findFirst({
+        where: {
+          id: input.credential_id,
+          user_id: ctx.session.user.id,
+        },
+      });
 
-      return credential;
+      await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, input.type));
+      if (updated) {
+        await redis.set(redisKeys.CREDENTIAL(ctx.session.user.id, updated.id), updated, { ex: 60 * 60 });
+      }
+      
+      return updated;
     }),
 
   delete: protectedProcedure
@@ -84,6 +121,7 @@ export const credentialsRouter = createTRPCRouter({
       if (credential) {
         await redis.del(redisKeys.CREDENTIAL_BY_TYPE(ctx.session.user.id, credential.type));
       }
+      await redis.del(redisKeys.CREDENTIAL(ctx.session.user.id, input.credential_id));
 
       return true;
     }),

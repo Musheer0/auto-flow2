@@ -16,9 +16,8 @@ import SelectCredentials from '@/features/credentials/components/select-credenti
 const WebhookForm = (props: NodeProps & { children: React.ReactNode }) => {
   const node_data: NodeData<WebhookData> = props.data as any
   const { id } = useParams<{ id: string }>()
-  const webhookurl = `${window.origin}/workflows/${id}/webhook/${props.id}`
-  const [whSecret, setWhSecret] = useState('')
-  const [showSecret, setShowSecret] = useState(false)
+  const webhookurl = `${window.origin}/api/workflows/${id}/webhook/${props.id}`
+  const [whSecret, setWhSecret] = useState(node_data?.user_data?.webhook_secret||"")
   const [copied, setCopied] = useState(false)
   const [name, setName] = useState(node_data?.config?.name || '')
   const { updateNode } = useEditorStore()
@@ -101,8 +100,8 @@ const WebhookForm = (props: NodeProps & { children: React.ReactNode }) => {
             )}
           >
             {whSecret.length === 0
-              ? "Recommended. Without a secret, anyone who finds this URL can trigger your workflow."
-              : "Sent with each request so you can verify it came from the expected source. Keep it private."}
+              ? "Recommended. Without a secret, anyone who finds this URL can trigger your workflow ."
+              : "Send with header x-webhook-secret with each request so you can verify it came from the expected source. Keep it private."}
           </p>
         </div>
       </BaseForm>

@@ -8,4 +8,5 @@ export type NodeData<T> = {
 
 export type WebhookData = {
   webhook_url: string;
+  webhook_secret:string
 };
