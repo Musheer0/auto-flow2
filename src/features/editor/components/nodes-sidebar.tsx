@@ -20,6 +20,7 @@ import React, { ReactNode, useMemo, useState } from 'react'
 type NodesSidebarProps = {
   children: ReactNode
   onSelect?: (type: NodeType) => void
+  existingNodes?: { type?: string }[]
 }
 
 const sectionMeta: Record<NodeAction, { label: string; icon: LucideIconType; hint: string }> = {
@@ -38,14 +39,20 @@ const sectionMeta: Record<NodeAction, { label: string; icon: LucideIconType; hin
 // local alias so we don't need to import LucideIcon type separately for the meta table
 type LucideIconType = React.ComponentType<{ className?: string }>
 
-const NodesSidebar = ({ children, onSelect }: NodesSidebarProps) => {
+const NodesSidebar = ({ children, onSelect, existingNodes = [] }: NodesSidebarProps) => {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
 
-  const entries = useMemo(
-    () => Object.entries(nodesUi) as [NodeType, (typeof nodesUi)[NodeType]][],
-    []
+  const hasTrigger = useMemo(
+    () => existingNodes.some((n) => nodesUi[n.type as NodeType]?.type === NodeAction.TRIGGER),
+    [existingNodes]
   )
+
+  const entries = useMemo(() => {
+    const all = Object.entries(nodesUi) as [NodeType, (typeof nodesUi)[NodeType]][]
+    if (!hasTrigger) return all
+    return all.filter(([, node]) => node.type !== NodeAction.TRIGGER)
+  }, [hasTrigger])
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -74,7 +81,7 @@ const NodesSidebar = ({ children, onSelect }: NodesSidebarProps) => {
     setOpen(false)
     setQuery('')
   }
-
+  
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger >{children}</SheetTrigger>

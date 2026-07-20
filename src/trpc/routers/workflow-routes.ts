@@ -4,6 +4,9 @@ import { generateSlug } from "random-word-slugs";
 import prisma from "@/db";
 import { redis } from "@/db/redis";
 import { redisKeys } from "@/lib/redis-keys";
+import { getWorkflowByid } from "../utils/get-workflow-by-id";
+import { TRPCError } from "@trpc/server";
+import { inngest } from "@/inngest/client";
 
 export const workflowsRouer = createTRPCRouter({
   create: protectedProcedure
@@ -127,4 +130,21 @@ export const workflowsRouer = createTRPCRouter({
         nextCursor: workflows.length > 9 ? workflows[9].id : null,
       };
     }),
+    runWokrkflowManually:protectedProcedure
+    .input(z.object({
+      workflowId:z.string(),
+      triggerNodeId:z.string()
+    }))
+    .mutation(async({ctx,input})=>{
+      const userId =ctx.session.user.id
+      const workflow = await getWorkflowByid(input.workflowId)
+      if(!workflow || workflow.user_id!==userId) throw new TRPCError({code:"NOT_FOUND"})
+      await inngest.send({
+          name:"app/workflow.started",
+          data:{
+            workflow,
+            triggerNodeId:input.triggerNodeId
+          }
+      })
+    })
 });

@@ -17,6 +17,7 @@ import { NodeType } from "@/generated/prisma/enums";
 import { createId } from "@paralleldrive/cuid2";
 import { NodeTypes } from "../config/node-types";
 import SaveButton from "./save-button";
+import StartWorkflowManually from "./start-workflow-manually-btn";
 
 export default function WorkflowEditor() {
   const { edges, nodes, onNodesChange, onEdgesChange, onConnect, addNode } =
@@ -41,12 +42,13 @@ export default function WorkflowEditor() {
     >
       <Background />
       <Panel position={"top-right"}>
-        <NodesSidebar onSelect={handleAddNode}>
+        <NodesSidebar onSelect={handleAddNode} existingNodes={nodes}>
           <Button>Add Node</Button>
         </NodesSidebar>
       </Panel>
-      <Panel position="bottom-center">
+      <Panel position="bottom-center" className="flex items-center gap-2"> 
       <SaveButton/>
+      <StartWorkflowManually/>
       </Panel>
     </ReactFlow>
   );

@@ -26,11 +26,11 @@ const executeNode = async (
 };
 
 export const processTask = inngest.createFunction(
-  { id: "process-task", triggers: { event: "app/task.created" } },
+  { id: "process-task", triggers: { event: "app/workflow.started" } },
   async ({ event, step }) => {
     const { data } = event;
     const workflowRecord: workflow = data.workflow as any;
-    const triggerNodeId = data.triggerNode as string;
+    const triggerNodeId = data.triggerNodeId as string;
     const workflowData = JSON.parse(
       workflowRecord.data
     ) as WorkflowDataSchema;
