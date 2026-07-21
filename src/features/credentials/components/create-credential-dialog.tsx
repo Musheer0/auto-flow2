@@ -34,6 +34,8 @@ const NODE_TYPE_LABELS: Record<NodeType, string> = {
   [NodeType.WEBHOOK]: "Webhook",
   [NodeType.HTTP_REQUEST]: "HTTP Request",
   [NodeType.SEND_TELEGRAM_MESSAGE]: "Telegram Message",
+  [NodeType.SEND_EMAIL]: "SMTP Email",
+  [NodeType.SEND_DISCORD_MESSAGE]: "Discord Webhook",
 };
 
 interface CreateCredentialDialogProps {
