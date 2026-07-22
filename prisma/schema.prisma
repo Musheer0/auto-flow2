@@ -22,6 +22,8 @@ model user {
   workflows   workflow[]
   credentials credential[]
   ai_usage    ai_usage?
+
+  messages  message[]
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
 }
@@ -71,6 +73,8 @@ model workflow {
   user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
   data       String   @default("{}")
   name       String   @default("untitled workflow")
+  
+  messages message[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 }
@@ -88,19 +92,33 @@ model credential {
   @@index([type, user_id])
 }
 
-enum Plan {
-  FREE
-  PLUS
-  ULTRA
-}
 model ai_usage {
   id         String   @id @default(cuid())
   user_id    String @unique
   user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  type       Plan     @default(FREE)
   credits_alloted   Int  @default(10000)
   credits_used   Int @default(0)   
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+}
+
+enum MessageType {
+  USER
+  AI
+  WORKFLOW
+}
+model message {
+  id      String   @id @default(cuid())
+  user_id   String 
+  user      user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  workflow_id String
+
+  workflow workflow  @relation(references: [id], fields: [workflow_id], onDelete: Cascade)
+  type      MessageType    @default(USER)
+  content   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  credits_used   Int @default(0)   
 
 }

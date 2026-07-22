@@ -55,7 +55,7 @@ export const nodesUi:nodesUi = {
     SEND_DISCORD_MESSAGE:{
             type:NodeAction.EXECUTOR,
         description:"Send a message via Discord webhook",
-        icon:DiscordIcon,
+        icon:"/discord.png",
         name:"Send Discord Message"
     }
 }

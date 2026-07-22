@@ -56,7 +56,11 @@ const BaseExecutor = (props: NodeProps) => {
         )}
 
         <BaseNodeContent>
-          {NodeUi && <NodeUi.icon />}
+          {NodeUi && 
+          <>
+          {typeof NodeUi.icon === "string" ? <img src={NodeUi.icon} alt={NodeUi.type} className='w-10 h-10 object-contain' />:<NodeUi.icon />}
+          </>
+          }
           <Handle type="target" position={Position.Left} />
           <Handle type="source" position={Position.Right} />
         </BaseNodeContent>

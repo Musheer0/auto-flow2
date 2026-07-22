@@ -69,5 +69,6 @@ export const edgeSchema = z.object({
 export const workflowDataSchema = z.object({
   nodes: z.array(nodeSchema),
   edges: z.array(edgeSchema),
+  summary:z.string()
 });
 export const generatedOutPutSchema = workflowDataSchema

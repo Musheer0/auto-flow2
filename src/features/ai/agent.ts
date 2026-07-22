@@ -7,18 +7,21 @@ import { sanitizeAiResponse } from "./sanitize-ai-response";
 import prisma from "@/db";
 import { redis } from "@/db/redis";
 import { redisKeys } from "@/lib/redis-keys";
-export const generateWorkflow = async(prompt:string,workflowId:string,prev:any='{}')=>{
+import { getTokensUsed } from "./lib/utils";
+export const generateWorkflow = async(prompt:string,workflowId:string,prev:any='{}',memory?:string)=>{
     const result = await generateObject({
         model:groq("openai/gpt-oss-120b"),
         system:generateWorkflowPrompt,
         schema:generatedOutPutSchema,
         prompt:`
+        memory :${memory}
         current workflow state -:
         data :${JSON.stringify(prev||"{}")}
 
         user request:${prompt}
         `,
     })
+    const tokens_used =  getTokensUsed(result.usage)
     const data =  result.object
     const sanitized_data = sanitizeAiResponse(data)
      const updated_workflow = await prisma.workflow.update({
@@ -32,5 +35,5 @@ export const generateWorkflow = async(prompt:string,workflowId:string,prev:any='
               await redis.set(redisKeys.WORKFLOW(updated_workflow.user_id, updated_workflow.id), updated_workflow, { ex: 60 * 60 });
         
               await redis.set(redisKeys.WORKFLOW_RUN( updated_workflow.id), updated_workflow, { ex: 60 * 60 });
-            return updated_workflow
+            return {updated_workflow, summary:data.summary,tokens_used}
 }

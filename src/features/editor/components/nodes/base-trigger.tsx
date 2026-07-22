@@ -21,7 +21,7 @@ const BaseTrigger = (props: NodeProps) => {
   const NodeForm = NodeForms[props.type as keyof typeof nodesUi]
   const node_data: NodeData<any> = props.data as any
 
-  const name = node_data?.config?.name || props.type===NodeType.MANUAL_TRIGGER ? "MANUAL_TRIGGER":null
+  const name = node_data?.config?.name || props.type===NodeType.MANUAL_TRIGGER ? "MANUAL_TRIGGER":props.type
   const isUnconfigured = !name
 
   if (NodeUi)
@@ -69,7 +69,7 @@ const BaseTrigger = (props: NodeProps) => {
               : 'bg-orange-600 dark:bg-orange-400'
           )}
         >
-          {name || `${NodeUi.name} (unconfigured)`}
+          { `${NodeUi.name} ${isUnconfigured ? "(unconfigured)": ""}` || name}
         </Badge>
       </BaseNode>
     )

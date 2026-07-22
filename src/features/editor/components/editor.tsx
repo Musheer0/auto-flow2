@@ -20,9 +20,12 @@ import SaveButton from "./save-button";
 import StartWorkflowManually from "./start-workflow-manually-btn";
 import GenerateWorkflow from "./generate-workflow";
 import { useParams } from "next/navigation";
+import { SparkleIcon } from "lucide-react";
+import { useAISidebar } from "@/features/ai/components/ai-sidebar-provider";
 
 export default function WorkflowEditor() {
   const {id} = useParams<{id:string}>()
+  const {toggle} = useAISidebar()
   const { edges, nodes, onNodesChange, onEdgesChange, onConnect, addNode } =
     useEditorStore();
   const handleAddNode = (type: NodeType) => {
@@ -53,7 +56,11 @@ export default function WorkflowEditor() {
       <SaveButton/>
       <StartWorkflowManually/>
       </Panel>
-      <Panel position="top-left"><GenerateWorkflow id={id}/></Panel>
+      <Panel position="top-left">
+        <Button onClick={toggle}>
+          <SparkleIcon/>
+        </Button>
+      </Panel>
     </ReactFlow>
   );
 }
