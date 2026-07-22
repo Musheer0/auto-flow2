@@ -15,8 +15,8 @@ export const edgeSchema = z.object({
   id: z.string().min(1),
   source: z.string().min(1),
   target: z.string().min(1),
-  sourceHandle: z.string().nullable().optional(),
-  targetHandle: z.string().nullable().optional(),
+  sourceHandle: z.any().optional(),
+  targetHandle: z.any().optional(),
 });
 
 export const workflowSchema = z.object({

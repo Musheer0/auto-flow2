@@ -28,8 +28,10 @@ export const useWorkflowById = (id: string) => {
 
   useEffect(() => {
     if (!isSuccess || !data) return;
-
+    setNodes([])
+    setEdges([])
     try {
+      if(!data.data?.nodes && !data.data?.edges) return
       const parsed = workflowSchema.parse({ ...data.data, workflowId: id });
       setNodes(parsed.nodes);
       setEdges(parsed.edges);

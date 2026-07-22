@@ -21,6 +21,7 @@ model user {
   sessions    session[]
   workflows   workflow[]
   credentials credential[]
+  ai_usage    ai_usage?
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
 }
@@ -85,4 +86,21 @@ model credential {
   updated_at DateTime @updatedAt
 
   @@index([type, user_id])
+}
+
+enum Plan {
+  FREE
+  PLUS
+  ULTRA
+}
+model ai_usage {
+  id         String   @id @default(cuid())
+  user_id    String @unique
+  user       user     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  type       Plan     @default(FREE)
+  credits_alloted   Int  @default(10000)
+  credits_used   Int @default(0)   
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
 }

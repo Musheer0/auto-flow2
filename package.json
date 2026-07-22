@@ -10,6 +10,8 @@
     "format": "biome format --write"
   },
   "dependencies": {
+    "@ai-sdk/google": "^4.0.21",
+    "@ai-sdk/groq": "^4.0.13",
     "@base-ui/react": "^1.6.0",
     "@hookform/resolvers": "^5.4.0",
     "@paralleldrive/cuid2": "^3.3.0",
@@ -21,6 +23,7 @@
     "@trpc/tanstack-react-query": "^11.18.0",
     "@upstash/redis": "^1.38.0",
     "@xyflow/react": "^12.11.2",
+    "ai": "^7.0.34",
     "axios": "^1.18.1",
     "class-variance-authority": "^0.7.1",
     "client-only": "^0.0.1",

@@ -18,8 +18,11 @@ import { createId } from "@paralleldrive/cuid2";
 import { NodeTypes } from "../config/node-types";
 import SaveButton from "./save-button";
 import StartWorkflowManually from "./start-workflow-manually-btn";
+import GenerateWorkflow from "./generate-workflow";
+import { useParams } from "next/navigation";
 
 export default function WorkflowEditor() {
+  const {id} = useParams<{id:string}>()
   const { edges, nodes, onNodesChange, onEdgesChange, onConnect, addNode } =
     useEditorStore();
   const handleAddNode = (type: NodeType) => {
@@ -50,6 +53,7 @@ export default function WorkflowEditor() {
       <SaveButton/>
       <StartWorkflowManually/>
       </Panel>
+      <Panel position="top-left"><GenerateWorkflow id={id}/></Panel>
     </ReactFlow>
   );
 }

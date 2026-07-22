@@ -7,6 +7,7 @@ import { redisKeys } from "@/lib/redis-keys";
 import { getWorkflowByid } from "../utils/get-workflow-by-id";
 import { TRPCError } from "@trpc/server";
 import { inngest } from "@/inngest/client";
+import { generateWorkflow } from "@/features/ai/agent";
 
 export const workflowsRouer = createTRPCRouter({
   create: protectedProcedure
@@ -146,5 +147,17 @@ export const workflowsRouer = createTRPCRouter({
             triggerNodeId:input.triggerNodeId
           }
       })
+    }),
+    generateWorkflow: protectedProcedure
+    .input(z.object({
+      prompt:z.string(),
+      workflow_id:z.string()
+    }))
+    .mutation(async({ctx,input})=>{
+      const userId = ctx.session.user.id
+      const workflow = await getWorkflowByid(input.workflow_id)
+      if(!workflow || workflow.user_id!==userId) throw new TRPCError({code:"NOT_FOUND"})
+      const generated_workflow = await generateWorkflow(input.prompt,input.workflow_id, workflow.data||{})
+      return generated_workflow
     })
 });

@@ -28,6 +28,7 @@ const SaveButton = () => {
       })
     } catch (error) {
       if (error instanceof ZodError) {
+        console.log(error)
         toast.warning(error.issues[0]?.message ?? "Invalid workflow data")
         return
       }
