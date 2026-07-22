@@ -1,10 +1,11 @@
 import z from "zod";
-import { createTRPCRouter, protectedProcedure } from "../init";
+import { createTRPCRouter, protectedProcedure, protectedWithUsageProcedure } from "../init";
 import prisma from "@/db";
 import { TRPCError } from "@trpc/server";
 import { MessageType } from "@/generated/prisma/enums";
 import { getWorkflowByid } from "../utils/get-workflow-by-id";
 import { generateWorkflow } from "@/features/ai/agent";
+import { updateUserAiUsage } from "../utils/update-user-ai-usage";
 
 export const messagesRouter = createTRPCRouter({
   getAll: protectedProcedure
@@ -40,7 +41,7 @@ export const messagesRouter = createTRPCRouter({
       };
     }),
 
-  send: protectedProcedure
+  send:protectedWithUsageProcedure
     .input(
       z.object({
         workflow_id: z.string(),
@@ -51,6 +52,8 @@ export const messagesRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.session.user.id;
+      const hasSufficientCredits = ctx.session.usage.credits_alloted - ctx.session.usage.credits_used >2000
+      if(!hasSufficientCredits) throw new TRPCError({code:"PAYMENT_REQUIRED"})
 
       const workflow = await getWorkflowByid(input.workflow_id)
 
@@ -76,6 +79,7 @@ export const messagesRouter = createTRPCRouter({
           credits_used:generated_workflow.tokens_used||100
         },
       });
-      return {messages:[message,summary],workflow:generated_workflow.updated_workflow};
+      const usage = await updateUserAiUsage(userId, generated_workflow.tokens_used,"inc")
+      return {messages:[message,summary],workflow:generated_workflow.updated_workflow,usage};
     }),
 });

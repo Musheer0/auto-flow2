@@ -4,12 +4,14 @@ import { workflowsRouer } from "./workflow-routes";
 import { credentialsRouter } from "./credentials-routes";
 import { editorRouter } from "./editor-routes";
 import { messagesRouter } from "./message-routes";
+import { aiUsageRouter } from "./ai-usage-routes";
 
 export const appRouter = createTRPCRouter({
   workflows: workflowsRouer,
   credentials: credentialsRouter,
   editor: editorRouter,
   messages: messagesRouter,
+  aiUsage: aiUsageRouter,
 });
 
 // export type definition of API

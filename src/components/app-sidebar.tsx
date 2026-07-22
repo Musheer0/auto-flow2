@@ -18,6 +18,7 @@ import {
 import { Workflow, KeyRound, Zap } from "lucide-react";
 import { UserNav } from "@/components/user-nav";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import UsageCard from "@/features/payment/compoents/usage-card";
 
 const navItems = [
   {
@@ -79,6 +80,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
+        <UsageCard/>
         <SidebarMenu>
           <SidebarMenuItem>
             <UserNav />

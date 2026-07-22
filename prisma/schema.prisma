@@ -22,7 +22,6 @@ model user {
   workflows   workflow[]
   credentials credential[]
   ai_usage    ai_usage?
-
   messages  message[]
   created_at  DateTime     @default(now())
   updated_at  DateTime     @updatedAt
