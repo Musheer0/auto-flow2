@@ -19,5 +19,6 @@ export const executorsConfig: Record<NodeType, NodeExecutor | null> = {
   SEND_EMAIL: executeSendEmailNode,
   SEND_DISCORD_MESSAGE: executeSendDiscordMessageNode,
   WEBHOOK: null,
-  GROQ_AI:executeGroqAiNode
+  GROQ_AI:executeGroqAiNode,
+  PUBSUBHUBBUB:null
 };

@@ -1,11 +1,10 @@
 // app/api/webhooks/youtube/route.ts
 
 import { NextRequest, NextResponse } from "next/server";
-import { verifyYoutubePubSub } from "../../_helpers/verify-subcribe";
+import { verifyYoutubePubSub } from "../../../../../youtube/pubsubhub/_helpers/verify-subcribe";
 
 export async function GET(req: NextRequest) {
-  const verification = verifyYoutubePubSub(req, {
-  });
+  const verification = verifyYoutubePubSub(req, {});
 
   if (verification) return verification;
 

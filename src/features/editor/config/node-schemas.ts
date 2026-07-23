@@ -5,6 +5,7 @@ import { sendEmailSchema } from "../schemas/send-email.schema";
 import { sendDiscordMessageSchema } from "../schemas/send-discord-message.schema";
 import { telegramSendMessageSchema } from "../schemas/send-telegram-message.schema";
 import { groqAiSchema } from "../schemas/groq-ai-schema";
+import { YoutubePubSubSchema } from "../schemas/youtube-pubsubhubhub-schema";
 export const NodeSchemas: Record<NodeType, ZodObject | null> = {
     MANUAL_TRIGGER: null,
     HTTP_REQUEST: httpRequestSchema,
@@ -12,7 +13,8 @@ export const NodeSchemas: Record<NodeType, ZodObject | null> = {
     SEND_EMAIL: sendEmailSchema,
     SEND_DISCORD_MESSAGE: sendDiscordMessageSchema,
     WEBHOOK: null,
-    GROQ_AI:groqAiSchema
+    GROQ_AI:groqAiSchema,
+    PUBSUBHUBBUB:YoutubePubSubSchema
 };
 
 function unwrap(schema: ZodType): ZodType {

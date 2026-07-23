@@ -63,5 +63,11 @@ export const nodesUi:nodesUi = {
         description:"generate  plain text content with groq",
         icon:"/groq.png",
         name:"Generate Groq AI content"
+    },
+    PUBSUBHUBBUB:{
+        type:NodeAction.TRIGGER,
+        description:"trigger an event when selected channel uploads videos on youtube",
+        name:"Youtube PubSubHubHub",
+        icon:"/pubsubhubhub.png"
     }
 }

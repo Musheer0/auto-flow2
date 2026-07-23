@@ -1,4 +1,6 @@
+import { keyof } from "zod";
 import { schemaPrompt } from "../editor/config/node-schemas";
+import { nodesUi } from "../editor/config/nodes-ui";
 
 export const generateWorkflowPrompt = `
 You are a workflow automation assistant.
@@ -59,7 +61,11 @@ Rules:
 - Never generate duplicate names.
 
 ---
-
+## Available Nodes 
+${JSON.stringify(Object.keys(nodesUi).map((k)=>{
+  const { icon,...rest} = nodesUi[k as keyof typeof nodesUi]
+  return rest
+}))}
 ## Node Schemas
 
 ${schemaPrompt}

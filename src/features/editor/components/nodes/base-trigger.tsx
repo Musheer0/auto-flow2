@@ -23,13 +23,14 @@ const BaseTrigger = (props: NodeProps) => {
 
   const name = node_data?.config?.name || props.type===NodeType.MANUAL_TRIGGER ? "MANUAL_TRIGGER":props.type
   const isUnconfigured = !name
-
+  const isPubSubHub = props.type===NodeType.PUBSUBHUBBUB
+  const isSubscribed =props.type===NodeType.PUBSUBHUBBUB && node_data?.user_data?.has_subscribed
   if (NodeUi)
     return (
       <BaseNode
         className={cn(
           'rounded-r-none h-14 w-14 relative flex items-center justify-center',
-          isUnconfigured && 'ring-1 ring-red-500/60'
+          isUnconfigured && 'ring-1 ring-red-500/60',
         )}
       >
         {NodeForm && (
@@ -57,8 +58,11 @@ const BaseTrigger = (props: NodeProps) => {
         )}
 
         <BaseNodeContent>
-          {NodeUi && <NodeUi.icon />}
-          <Handle type="source" position={Position.Right} />
+  {NodeUi && 
+          <>
+          {typeof NodeUi.icon === "string" ? <img src={NodeUi.icon} alt={NodeUi.type} className='w-10 h-10 object-contain' />:<NodeUi.icon />}
+          </>
+          }          <Handle type="source" position={Position.Right} />
         </BaseNodeContent>
 
         <Badge
