@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Loader2, Pencil, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import UpgradeButton from "@/features/payment/compoents/ugrade-button";
 
 interface WorkflowDetailHeaderProps {
   name: string;
@@ -36,6 +37,7 @@ export function WorkflowDetailHeader({
         </h1>
       </div>
       <div className="flex items-center gap-2">
+        <UpgradeButton/>
         <Button variant="outline" size="sm" onClick={onEdit}>
           <Pencil className="size-4" />
           Edit

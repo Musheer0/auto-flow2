@@ -65,7 +65,7 @@ Rules:
 ${schemaPrompt}
 
 Rules:
-
+- ai content generation  nodes always returns data  in this format { output:string,finish_reason:any},
 - Populate user_data ONLY with fields defined by that node's schema.
 - Do not invent additional fields.
 - Do not omit required fields.

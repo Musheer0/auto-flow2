@@ -57,5 +57,11 @@ export const nodesUi:nodesUi = {
         description:"Send a message via Discord webhook",
         icon:"/discord.png",
         name:"Send Discord Message"
+    },
+    GROQ_AI:{
+        type:NodeAction.EXECUTOR,
+        description:"generate  plain text content with groq",
+        icon:"/groq.png",
+        name:"Generate Groq AI content"
     }
 }

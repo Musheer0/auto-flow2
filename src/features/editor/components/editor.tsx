@@ -22,6 +22,7 @@ import GenerateWorkflow from "./generate-workflow";
 import { useParams } from "next/navigation";
 import { SparkleIcon } from "lucide-react";
 import { useAISidebar } from "@/features/ai/components/ai-sidebar-provider";
+import { AuroraProvider } from "@/components/aurora-loader-provider";
 
 export default function WorkflowEditor() {
   const {id} = useParams<{id:string}>()
@@ -38,14 +39,16 @@ export default function WorkflowEditor() {
   };
   return (
     <ReactFlow
-      nodes={nodes}
+    nodes={nodes}
       edges={edges}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       fitView
       nodeTypes={NodeTypes}
-    >
+      className="relative"
+      >
+      <AuroraProvider>
       <Background />
       <Panel position={"top-right"}>
         <NodesSidebar onSelect={handleAddNode} existingNodes={nodes}>
@@ -61,6 +64,7 @@ export default function WorkflowEditor() {
           <SparkleIcon/>
         </Button>
       </Panel>
+    </AuroraProvider>
     </ReactFlow>
   );
 }

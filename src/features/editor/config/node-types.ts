@@ -8,5 +8,6 @@ export const NodeTypes: Record<NodeType, any> = {
   HTTP_REQUEST:BaseExecutor,
   SEND_TELEGRAM_MESSAGE:BaseExecutor,
   SEND_EMAIL:BaseExecutor,
-  SEND_DISCORD_MESSAGE:BaseExecutor
+  SEND_DISCORD_MESSAGE:BaseExecutor,
+  GROQ_AI:BaseExecutor
 };

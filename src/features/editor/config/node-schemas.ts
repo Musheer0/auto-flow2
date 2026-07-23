@@ -4,6 +4,7 @@ import { httpRequestSchema } from "../schemas/http-form.schema";
 import { sendEmailSchema } from "../schemas/send-email.schema";
 import { sendDiscordMessageSchema } from "../schemas/send-discord-message.schema";
 import { telegramSendMessageSchema } from "../schemas/send-telegram-message.schema";
+import { groqAiSchema } from "../schemas/groq-ai-schema";
 export const NodeSchemas: Record<NodeType, ZodObject | null> = {
     MANUAL_TRIGGER: null,
     HTTP_REQUEST: httpRequestSchema,
@@ -11,6 +12,7 @@ export const NodeSchemas: Record<NodeType, ZodObject | null> = {
     SEND_EMAIL: sendEmailSchema,
     SEND_DISCORD_MESSAGE: sendDiscordMessageSchema,
     WEBHOOK: null,
+    GROQ_AI:groqAiSchema
 };
 
 function unwrap(schema: ZodType): ZodType {

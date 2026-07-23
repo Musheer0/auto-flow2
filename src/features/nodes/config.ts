@@ -3,6 +3,8 @@ import { executeHttpNode } from "./executors/execute-http-node";
 import { executeSendEmailNode } from "./executors/execute-send-email-node";
 import { executeSendDiscordMessageNode } from "./executors/execute-send-discord-message-node";
 import { executeTelegramSendMessageNode } from "./executors/execute-send-telegram-message-node";
+import BaseExecutor from "../editor/components/nodes/base-executor";
+import { executeGroqAiNode } from "./executors/groq-ai-executor";
 
 type NodeExecutor = (
   userId: string,
@@ -17,4 +19,5 @@ export const executorsConfig: Record<NodeType, NodeExecutor | null> = {
   SEND_EMAIL: executeSendEmailNode,
   SEND_DISCORD_MESSAGE: executeSendDiscordMessageNode,
   WEBHOOK: null,
+  GROQ_AI:executeGroqAiNode
 };
