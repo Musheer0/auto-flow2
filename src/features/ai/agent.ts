@@ -8,18 +8,35 @@ import prisma from "@/db";
 import { redis } from "@/db/redis";
 import { redisKeys } from "@/lib/redis-keys";
 import { getTokensUsed } from "./lib/utils";
+import { getCurrentUser } from "@/lib/auth.server";
+
 export const generateWorkflow = async(prompt:string,workflowId:string,prev:any='{}',memory?:string)=>{
+    const user = await getCurrentUser();
+    if (!user) {
+        throw new Error("Unauthorized");
+    }
+
+    const workflow = await prisma.workflow.findFirst({
+        where: {
+            id: workflowId,
+            user_id: user.user.id,
+        },
+    });
+    if (!workflow) {
+        throw new Error("Workflow not found");
+    }
+
     const result = await generateObject({
-        model:groq("openai/gpt-oss-120b"),
+        model:groq("openai/gpt-oss-120b",),
         system:generateWorkflowPrompt,
         schema:generatedOutPutSchema,
         prompt:`
         memory :${memory}
         current workflow state -:
         data :${JSON.stringify(prev||"{}")}
-
         user request:${prompt}
         `,
+        
     })
     const tokens_used =  getTokensUsed(result.usage)
     const data =  result.object
@@ -27,6 +44,7 @@ export const generateWorkflow = async(prompt:string,workflowId:string,prev:any='
      const updated_workflow = await prisma.workflow.update({
             where:{
                 id:workflowId,
+                user_id: user.user.id,
             },
             data:{
                 data:JSON.stringify(sanitized_data)

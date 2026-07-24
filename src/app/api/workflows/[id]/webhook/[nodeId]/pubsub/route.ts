@@ -3,8 +3,6 @@
 import { workflowDataSchema } from "@/features/editor/schemas/workflow-schema";
 import { NodeData, WebhookData } from "@/features/editor/types";
 import { inngest } from "@/inngest/client";
-import { decrypt } from "@/lib/encrypt-decrypt";
-import { getCredentialById } from "@/trpc/utils/get-credential-by-id";
 import { getWorkflowByid } from "@/trpc/utils/get-workflow-by-id";
 
 import { NextRequest, NextResponse } from "next/server";
@@ -65,7 +63,6 @@ export const POST = async (
   { params }: { params: Promise<{ id: string; nodeId: string }> }
 ) => {
   const header = req.headers;
-  const wh_secret = header.get("x-webhook-secret") || "";
   const signatureHeader = header.get("x-hub-signature");
   const { id, nodeId } = await params;
 
@@ -84,7 +81,7 @@ export const POST = async (
   if (!node_data?.user_data || !node_data?.user_data?.verify_secret)
     return NextResponse.json(null);
 
-  const secret = decrypt(node_data.user_data.verify_secret);
+  const secret = node_data.user_data.verify_secret
 
   // raw text MUST be read before any signature check, and used as-is (no re-serialization)
   const xml = await req.text();
@@ -105,7 +102,6 @@ export const POST = async (
     data: {
       workflow,
       triggerNodeId: pubsub_node.id,
-      trigger_data: videoData,
       body:videoData
     },
   });

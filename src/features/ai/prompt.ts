@@ -1,6 +1,7 @@
 import { keyof } from "zod";
 import { schemaPrompt } from "../editor/config/node-schemas";
 import { nodesUi } from "../editor/config/nodes-ui";
+import { nodeOutpusArray } from "../editor/config/nodeOutputs";
 
 export const generateWorkflowPrompt = `
 You are a workflow automation assistant.
@@ -70,6 +71,9 @@ ${JSON.stringify(Object.keys(nodesUi).map((k)=>{
 
 ${schemaPrompt}
 
+
+## Adition Node Outputs(statics output  nodes only)
+${JSON.stringify(nodeOutpusArray)}
 Rules:
 - ai content generation  nodes always returns data  in this format { output:string,finish_reason:any},
 - Populate user_data ONLY with fields defined by that node's schema.

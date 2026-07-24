@@ -11,5 +11,6 @@ export const NodeTypes: Record<NodeType, any> = {
   SEND_EMAIL:BaseExecutor,
   SEND_DISCORD_MESSAGE:BaseExecutor,
   GROQ_AI:BaseExecutor,
-  PUBSUBHUBBUB:BaseTrigger
+  PUBSUBHUBBUB:BaseTrigger,
+  GOOGLE_FORMS:BaseTrigger
 };

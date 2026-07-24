@@ -63,6 +63,7 @@ enum NodeType {
   SEND_DISCORD_MESSAGE
   GROQ_AI
   PUBSUBHUBBUB
+  GOOGLE_FORMS
 }
 enum NodeAction {
   EXECUTOR

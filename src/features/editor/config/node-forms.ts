@@ -8,6 +8,7 @@ import SendTelegramMessageForm from "../components/forms/send-telegram-message-f
 import WebhookForm from "../components/forms/webhook-form";
 import GroqAiForm from "../components/forms/groq-ai-form";
 import YoutubePubSubForm from "../components/forms/youtube-pubsub-form";
+import GoogleFormTriggerForm from "../components/forms/google-form-trigger-form";
 
 type NodeFormComponent = ComponentType<NodeProps & { children: ReactNode }>;
 
@@ -19,5 +20,6 @@ export const NodeForms: Record<NodeType, NodeFormComponent | null> = {
     SEND_DISCORD_MESSAGE: SendDiscordMessageForm,
     WEBHOOK: WebhookForm,
     GROQ_AI:GroqAiForm,
-    PUBSUBHUBBUB:YoutubePubSubForm
+    PUBSUBHUBBUB:YoutubePubSubForm,
+    GOOGLE_FORMS:GoogleFormTriggerForm
 };
