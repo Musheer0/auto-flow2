@@ -18,7 +18,6 @@ import { createId } from "@paralleldrive/cuid2";
 import { NodeTypes } from "../config/node-types";
 import SaveButton from "./save-button";
 import StartWorkflowManually from "./start-workflow-manually-btn";
-import GenerateWorkflow from "./generate-workflow";
 import { useParams } from "next/navigation";
 import { SparkleIcon } from "lucide-react";
 import { useAISidebar } from "@/features/ai/components/ai-sidebar-provider";
