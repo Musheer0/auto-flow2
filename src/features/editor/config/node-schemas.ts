@@ -14,7 +14,8 @@ export const NodeSchemas: Record<NodeType, ZodObject | null> = {
     SEND_DISCORD_MESSAGE: sendDiscordMessageSchema,
     WEBHOOK: null,
     GROQ_AI:groqAiSchema,
-    PUBSUBHUBBUB:YoutubePubSubSchema
+    PUBSUBHUBBUB:YoutubePubSubSchema,
+    GOOGLE_FORMS:null
 };
 
 function unwrap(schema: ZodType): ZodType {
