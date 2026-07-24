@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-  "build": "NODE_OPTIONS='--max-old-space-size=8096' prisma generate &&  next build --turbopack",
+    "build": "NODE_OPTIONS='--max-old-space-size=8096' prisma generate &&  next build --turbopack",
     "start": "next start",
     "lint": "biome check",
     "format": "biome format --write",
-    "build:tsc":"npx tsc --noEmit"
+    "build:tsc": "npx tsc --noEmit"
   },
   "dependencies": {
     "@ai-sdk/google": "^4.0.21",
