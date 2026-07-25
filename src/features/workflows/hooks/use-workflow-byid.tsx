@@ -20,6 +20,7 @@ export const useWorkflowById = (id: string) => {
           // pure parse only — no side effects here
           return {...result,data:JSON.parse(result.data)}
         },
+        refetchOnWindowFocus:false
       }
     )
   );
