@@ -43,7 +43,7 @@ const GoogleFormTriggerForm = (props: NodeProps & { children: React.ReactNode })
 
   const webhookUrl = useMemo(() => {
     if (!workflowId) return "";
-    return `${process.env.NEXT_PUBLIC_APP}/api/webhooks/triggers/google-form?workflow=${workflowId}`;
+    return `${window.origin}/api/webhooks/triggers/google-form?workflow=${workflowId}`;
   }, [workflowId]);
 
   const appScript = useMemo(() => {
