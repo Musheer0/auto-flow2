@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const authRoutes = [
   "/auth/google/sign-in",
   "/auth/callback/google",
+  "/login"
 ];
 
 const protectedRoutes = [
