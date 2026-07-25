@@ -68,10 +68,10 @@ export const processTask = inngest.createFunction(
       [
         trigger.type === "MANUAL_TRIGGER"
           ? "manual"
-          : trigger.data?.config?.name ?? trigger.type
+          : trigger.type==="GOOGLE_FORMS" ?
+          "gforms":trigger.data?.config?.name ?? trigger.type 
       ]: body||"started",
     };
-
     const executed = new Set<string>();
     const queue: string[] = [triggerNodeId];
 

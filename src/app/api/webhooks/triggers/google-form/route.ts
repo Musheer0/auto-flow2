@@ -33,7 +33,7 @@ export const POST = async (req: NextRequest) => {
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
-
+ console.log(body)
   await inngest.send({
     name: "app/workflow.started",
     data: {
